@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Moje wizyty</title>
+  <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="style/wizyty_uzytkownik_style.css">
+  <script defer src="js/wizyty_uzytkownik.js"></script>
+</head>
+<body>
+  <div class="main">
+    <div class="header_resize">
+      <div class="logo">
+        <h1><a href="#"><span>O</span>rtodonta123</a> <small>klinika ortodontyczna</small></h1>
+      </div>
+      <div class="clr"></div>
+
+      <!-- Główne menu -->
+      <div class="menu_nav">
+        <ul class="main_menu">
+          <li><a href="index_uzytkownik.html">Home</a></li>
+          <li class="active"><a href="wizyty_uzytkownik.html">Wizyty</a></li>
+          <li><a href="wiadomosci_uzytkownik.html">Wiadomości i powiadomienia</a></li>
+          <li><a href="panel_uzytkownik.html">Panel użytkownika</a></li>
+        </ul>
+        <ul class="user_menu">
+            <li><a id="powitanie" href="#">Witaj!</a></li>
+            <li><a href="index_gosc.html">Wyloguj</a></li>
+          </ul>
+        <div class="clr"></div>
+      </div>
+    </div>
+
+    <div class="content_resize">
+      <div class="content">
+        <div class="mainbar">
+          <div class="article">
+            <h2 class="fancy-title">Twoje zaplanowane wizyty</h2>
+            <div id="komunikat"></div>
+            <div id="listaWizyt" class="listaWizyt"></div>
+            <hr />
+            <h2 class="fancy-title">Umów nową wizytę</h2>
+            <form id="formWizyta">
+                <label for="lekarz">Lekarz:</label>
+                <select id="lekarz">
+                    <option value="">-- Wybierz lekarza --</option>
+                    <option value="1">dr Anna Kowalska</option>
+                    <option value="2">dr Jan Nowak</option>
+                    <option value="3">dr Ewa Zielińska</option>
+                </select>
+                <br><br>
+
+                <label for="data">Data wizyty:</label>
+                <input type="date" id="data" name="data"><br><br>
+
+                <label for="godzina">Godzina wizyty:</label>
+                <div id="godzina-tiles" class="godzina-tiles"></div>
+                <input type="hidden" id="godzina" name="godzina">
+                <br><br>
+
+                <label for="opis">Opis wizyty:</label><br>
+                <textarea id="opis" name="opis" rows="4" cols="50" placeholder="Powód wizyty"></textarea><br><br>
+
+                <input type="submit" value="Zapisz wizytę">
+            </form>
+          </div>
+        </div>
+        <div class="clr"></div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+  function showCookiePolicy() {
+    document.getElementById("cookieModal").style.display = "block";
+  }
+  </script>
+
+
+  
+  <div class="fbg">
+      <div class="fbg_resize">
+        <div class="contact_wrapper">
+          <div class="contact_left">
+            <p><strong>Poniedziałek:</strong> 08:00 – 16:00</p>
+            <p><strong>Wtorek:</strong> 08:00 – 16:00</p>
+            <p><strong>Środa:</strong> 08:00 – 16:00</p>
+            <p><strong>Czwartek:</strong> 08:00 – 16:00</p>
+            <p><strong>Piątek:</strong> 08:00 – 16:00</p>
+            <p><strong>Sobota:</strong> Nieczynne</p>
+            <p><strong>Niedziela:</strong> Nieczynne</p>
+          </div>
+          <div class="contact_right">
+            <p><strong>Email:</strong> <a href="mailto:kontakt@firma.pl">kontakt@firma.pl</a></p>
+            <p><strong>Telefon:</strong> <a href="tel:+48123456789">+48 123 456 789</a></p>
+            <p><strong>Adres:</strong> ul. Przykładowa 1, 00-001 Warszawa</p>
+			<p><a href="#" onclick="showCookiePolicy()">informacje o ciasteczkach</a></p>
+          </div>
+        </div>
+        <div class="clr"></div>
+      </div>
+    </div>
+  <div class="footer">
+      <div class="footer_resize">
+        <div class="clr"></div>
+      </div>
+    </div>
+
+
+
+
+<!-- MODAL -->
+<div id="cookieModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
+  <div style="background:white; width:80%; max-width:700px; margin:10% auto; padding:20px; border-radius:10px;">
+    <h2>Polityka ciasteczek</h2>
+    <p style="text-align:justify; max-height:60vh; overflow-y:auto;">
+      Nasza strona internetowa używa ciasteczek, aby zapewnić Ci jak najlepsze doświadczenia podczas przeglądania.
+      Ciasteczka to małe pliki tekstowe przechowywane na Twoim urządzeniu, które pozwalają nam zapamiętać Twoje preferencje i ustawienia.<br><br>
+
+      <strong>Jakie ciasteczka stosujemy?</strong><br>
+      Ciasteczka niezbędne – umożliwiają prawidłowe funkcjonowanie strony, takie jak logowanie do konta.<br>
+      Ciasteczka analityczne – pozwalają analizować, jak użytkownicy korzystają ze strony.<br>
+      Ciasteczka marketingowe – służą do wyświetlania dopasowanych reklam.<br><br>
+
+      <strong>Zarządzanie ciasteczkami:</strong><br>
+      Możesz zarządzać ustawieniami w przeglądarce. Zablokowanie ciasteczek może wpłynąć na działanie strony.<br><br>
+
+      Klikając „Akceptuję” lub kontynuując korzystanie z naszej strony, wyrażasz zgodę na używanie ciasteczek zgodnie z naszą polityką.
+    </p>
+    <div style="text-align:center; margin-top:20px;">
+  <button onclick="document.getElementById('cookieModal').style.display='none';">Akceptuję</button>
+	</div>
+
+  </div>
+</div>
+
+<script>
+  const imie = localStorage.getItem("imie");
+  const nazwisko = localStorage.getItem("nazwisko");
+
+
+  if (imie && nazwisko) {
+    document.getElementById("powitanie").textContent = `Witaj ${imie} ${nazwisko}!`;
+  }
+
+  document.getElementById('formWizyta').addEventListener('submit', async e => {
+    e.preventDefault();
+    const lekarzId    = parseInt(document.getElementById('lekarz').value, 10);
+    const dataWizyty  = document.getElementById('data').value;       
+    const godzina     = document.getElementById('godzina').value;   
+    const opisZabiegu = document.getElementById('opis').value.trim();
+
+    if (!lekarzId || !dataWizyty || !godzina || !opisZabiegu) {
+      alert('Wypelnij wszystkie pola');
+      return;
+    }
+
+    const idPacjenta = parseInt(localStorage.getItem('userId'), 10);
+    if (!idPacjenta) { 
+      alert('Błąd: brak zalogowanego użytkownika'); 
+      return; 
+    }
+
+    const resZ = await fetch('/api/zabiegi', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        DataZabiegu: dataWizyty,
+        Opis: opisZabiegu
+      })
+    });
+    const { success: okZ, idZabiegu, message: msgZ } = await resZ.json();
+    if (!okZ) return alert('Błąd zabiegu: '+msgZ);
+
+    const resW = await fetch('/api/wizyty', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        idPacjent:  idPacjenta,
+        idDentysta: lekarzId,
+        idUsługa:   idZabiegu,
+        DzieńWizyty:`${dataWizyty} ${godzina}:00`
+      })
+    });
+    const { success: okW, message: msgW } = await resW.json();
+    if (!okW) return alert('Błąd zapisania wizyty: '+msgW);
+
+    alert('Wizyta umówiona pomyślnie');
+  });
+</script>
+
+  
+<script>
+      const unavailableSlots = {
+        1: ["16:00","17:00","16:30","17:30"], // dr Anna Kowalska (idLekarze = 1)
+        2: ["08:00","08:30","17:30","17:00"], // dr Jan Nowak (idLekarze = 2)
+        3: ["08:00","08:30","09:30","09:00"]  // dr Ewa Zielińska (idLekarze = 3)
+      };
+
+      const godzinaTiles = document.getElementById('godzina-tiles');
+      const hiddenInput = document.getElementById('godzina');
+      const lekarzSelect = document.getElementById('lekarz');
+
+      function pad(n) {
+        return n.toString().padStart(2, '0');
+      }
+
+      function renderTimeTiles() {
+        const lekarzId = lekarzSelect.value;
+        const unavailable = unavailableSlots[lekarzId] || [];
+        godzinaTiles.innerHTML = '';
+        hiddenInput.value = '';
+
+        for (let t = 8 * 60; t <= 17 * 60 + 30; t += 30) {
+          const h = Math.floor(t / 60);
+          const m = t % 60;
+          const timeStr = `${pad(h)}:${pad(m)}`;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'godzina-tile';
+          btn.textContent = timeStr;
+
+          if (unavailable.includes(timeStr)) {
+            btn.disabled = true;
+            btn.classList.add('unavailable');
+          } else {
+            btn.onclick = function () {
+              document.querySelectorAll('.godzina-tile').forEach(b => b.classList.remove('active'));
+              btn.classList.add('active');
+              hiddenInput.value = timeStr;
+            };
+          }
+          godzinaTiles.appendChild(btn);
+        }
+      }
+
+      // Początkowe renderowanie (wszystko dostępne)
+      renderTimeTiles();
+
+      // Przeładowanie kafelków po zmianie lekarza
+      lekarzSelect.addEventListener('change', renderTimeTiles);
+</script>
+
+      
+        
+</body>
+</html>

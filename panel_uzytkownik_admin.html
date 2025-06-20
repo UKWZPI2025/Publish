@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Panel użytkownika – Administrator</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link href="style/style.css" rel="stylesheet" type="text/css" />
+    <link href="style/panel_uzytkownik_admin_style.css" rel="stylesheet" />
+    <style>
+        #userEditPanel {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            background: #f9f9f9;
+            border-top: 2px solid #ccc;
+        }
+
+        #userEditPanel > div:first-child {
+            flex: 2;
+            min-width: 0;
+        }
+
+        #grafikSection {
+            flex: 1;
+            background: #fff;
+            padding: 20px;
+            border-left: 1px solid #ccc;
+            min-width: 40;
+            display: none;
+        }
+
+        #absencePanel {
+            position: fixed;
+            top: 150px;
+            right: 0;
+            width: 200px;
+            background: #f0f0f0;
+            padding: 20px;
+            border-left: 2px solid #ccc;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        #absenceList {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        #absenceList li {
+            padding: 5px 0;
+            border-bottom: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .filter-bar {
+            margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-bar input,
+        .filter-bar select {
+            padding: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="header">
+            <div class="header_resize">
+                <div class="logo">
+                    <h1><a href="#"><span>O</span>rtodonta123</a> <small>klinika ortodontyczna</small></h1>
+                </div>
+                <div class="clr"></div>
+                <div class="menu_nav">
+                    <div class="menu_nav">
+                        <ul class="main_menu">
+                            <li><a href="index_admin.html">Home</a></li>
+                            <li><a href="wizyty_admin.html">Wizyty</a></li>
+                            <li><a href="wiadomosci_admin.html">Powiadomienia</a></li>
+                            <li class="active"><a href="panel_uzytkownik_admin.html">Panel użytkowników</a></li>
+                            <li><a href="panel_admin.html">Panel admin</a></li>
+                        </ul>
+                        <ul class="user_menu">
+                            <li><a href="#">Witaj Admin!</a></li>
+                            <li><a href="index_gosc.html">Wyloguj</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="content_resize">
+                    <div class="mainbar">
+                        <div class="article">
+                            <h2 style="text-align: center;" class="fancy-title" >Panel użytkowników – Administrator</h2>
+                            <div class="clr"></div>
+
+                            <div class="filter-bar">
+                                <h4>Filtruj użytkowników</h4>
+                                <input type="text" id="filterName" placeholder="Imię" oninput="filterUsers()">
+                                <input type="text" id="filterSurname" placeholder="Nazwisko" oninput="filterUsers()">
+                                <input type="text" id="filterPESEL" placeholder="PESEL" oninput="filterUsers()">
+                                <select class="edytuj-form" style="padding:2px 8px;" id="filterRole" onchange="filterUsers()">
+                                    <option value="">Wszystkie role</option>
+                                    <option value="Administrator">Administrator</option>
+                                    <option value="Recepcjonista">Recepcjonista</option>
+                                    <option value="Lekarz">Lekarz</option>
+                                    <option value="Pacjent">Pacjent</option>
+                                </select>
+                            </div>
+
+                            <div class="admin-section">
+                                <h3>Zarządzanie użytkownikami</h3>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                        <th>Imię i nazwisko</th>
+                                        <th>Typ konta</th>
+                                        <th>Email</th>
+                                        <th>PESEL</th>
+                                        <th>Akcje</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="userTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- PANEL EDYCJI UŻYTKOWNIKA -->
+                        <div id="userEditPanel" style="display: flex; align-items: flex-start;">
+                            <!-- LEWA KOLUMNA: FORMULARZ -->
+                            <div>
+                                <h3>Edytuj dane użytkownika</h3>
+                                <form id="userForm">
+                                    <label>Imię: <input type="text" id="editName" /></label>
+                                    <button class="edytuj-form" style="padding:2px 8px;" type="button" onclick="alert('Zmieniono Imie')">Edytuj</button><br><br>
+                                    <label>Drugie imię: <input type="text" id="editSecondName" /></label>
+                                    <button class="edytuj-form" style="padding:2px 8px;" type="button" onclick="alert('Zmieniono Drugie Imie')">Edytuj</button><br><br>
+                                    <label>Nazwisko: <input type="text" id="editSurname" /></label>
+                                    <button class="edytuj-form" style="padding:2px 8px;" type="button" onclick="alert('Zmieniono Nazwisko')">Edytuj</button><br><br>
+                                    <label>Email: <input type="email" id="editEmail" /></label>
+                                    <button class="edytuj-form" style="padding:2px 8px;" type="button" onclick="alert('Zmieniono Email')">Edytuj</button><br><br>
+                                    <label>PESEL: <input type="text" id="editPesel" /></label>
+                                    <button class="edytuj-form" style="padding:2px 8px;" type="button" onclick="alert('Zmieniono PESEL')">Edytuj</button><br><br>
+                                    <label>Nr telefonu: <input type="text" id="editNumerTel" /></label>
+                                    <button class="edytuj-form" style="padding:2px 8px;" type="button" onclick="alert('Zmieniono numer telefonu')">Edytuj</button><br><br>
+                                    <label>
+                                        Rola:
+                                        <select class="edytuj-form" style="padding:2px 8px;" id="editRole" onchange="toggleGrafikVisibility()">
+                                            <option>Administrator</option>
+                                            <option>Recepcjonista</option>
+                                            <option>Lekarz</option>
+                                            <option>Pacjent</option>
+                                        </select>
+                                    </label><br><br>
+                                    <label>Ostatnia zmiana hasła: <span id="lastPasswordChange">2024-12-01</span></label><br><br>
+                                    <button class="edytuj-form" style="padding:2px 8px;" type="button" onclick="alert('Wymuszono zmianę hasła')">Wymuś zmianę hasła</button>
+                                    <button class="edytuj-form" style="padding:2px 8px;" type="button" onclick="alert('Hasło zostało zmienione')">Zmień hasło</button><br><br>
+                                    <button class="edytuj-form" style="padding:2px 8px;" type="button" onclick="deleteUserFromFooter()">Usuń użytkownika</button>
+                                </form>
+                            </div>
+                            <!-- PRAWA KOLUMNA: GRAFIK -->
+                            <div id="grafikSection">
+                                <label>
+                                    <strong>Grafik:</strong>
+                                    <div class="current-schedule">
+                                        <strong>Aktualny grafik:</strong>
+                                        <ul class="schedule-list">
+                                            <li>Poniedziałek: 08:00 – 16:00</li>
+                                            <li>Wtorek: 08:00 – 16:00</li>
+                                            <li>Środa: 08:00 – 16:00</li>
+                                            <li>Czwartek: 08:00 – 16:00</li>
+                                            <li>Piątek: 08:00 – 16:00</li>
+                                        </ul>
+                                    </div>
+                                    <button onclick="toggleScheduleEditor(this)">Zmień grafik</button>
+                                    <div class="schedule-editor" style="display:none; margin-top:10px;">
+                                        <table>
+                                            <thead>
+                                                <tr><th>Dzień</th><th>Nieczynne</th><th>Godzina od</th><th>Godzina do</th></tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr data-day="Poniedziałek">
+                                                    <td>Poniedziałek</td>
+                                                    <td><input type="checkbox" class="closed-checkbox" onchange="toggleTimeInputs(this)" /></td>
+                                                    <td><input type="time" class="start-time" value="08:00" /></td>
+                                                    <td><input type="time" class="end-time" value="16:00" /></td>
+                                                </tr>
+                                                <tr data-day="Wtorek">
+                                                    <td>Wtorek</td>
+                                                    <td><input type="checkbox" class="closed-checkbox" onchange="toggleTimeInputs(this)" /></td>
+                                                    <td><input type="time" class="start-time" value="08:00" /></td>
+                                                    <td><input type="time" class="end-time" value="16:00" /></td>
+                                                </tr>
+                                                <tr data-day="Środa">
+                                                    <td>Środa</td>
+                                                    <td><input type="checkbox" class="closed-checkbox" onchange="toggleTimeInputs(this)" /></td>
+                                                    <td><input type="time" class="start-time" value="08:00" /></td>
+                                                    <td><input type="time" class="end-time" value="16:00" /></td>
+                                                </tr>
+                                                <tr data-day="Czwartek">
+                                                    <td>Czwartek</td>
+                                                    <td><input type="checkbox" class="closed-checkbox" onchange="toggleTimeInputs(this)" /></td>
+                                                    <td><input type="time" class="start-time" value="08:00" /></td>
+                                                    <td><input type="time" class="end-time" value="16:00" /></td>
+                                                </tr>
+                                                <tr data-day="Piątek">
+                                                    <td>Piątek</td>
+                                                    <td><input type="checkbox" class="closed-checkbox" onchange="toggleTimeInputs(this)" /></td>
+                                                    <td><input type="time" class="start-time" value="08:00" /></td>
+                                                    <td><input type="time" class="end-time" value="16:00" /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>                                   
+                                        <!--  <button id="saveGrafikBtn" type="button" onclick="saveSchedule(this)">Zapisz</button> -->
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL NIEOBECNOŚCI -->
+            <div id="absencePanel">
+                <h3>Nieobecności</h3>
+                <label>
+                    Lekarz:
+                    <select class="edytuj-form" style="padding:2px 8px;" id="absenceDoctor">
+                        <option>dr Anna Nowak</option>
+                        <option>dr Jan Nowicki</option>
+                    </select>
+                </label><br><br>
+                <label>Od: <input type="date" id="absenceFrom" /></label><br><br>
+                <label>Do: <input type="date" id="absenceTo" /></label><br><br>
+                <button class="edytuj-form" style="padding:2px 8px;" onclick="addAbsence()">Dodaj</button>
+                <ul id="absenceList"></ul>
+            </div>
+            <!-- STOPKA i MODAL  -->
+
+            <script>
+                // Pokazuje/ukrywa grafik w zależności od roli
+                function toggleGrafikVisibility() {
+                    const role = document.getElementById("editRole").value;
+                    const grafik = document.getElementById("grafikSection");
+                    grafik.style.display = role === "Lekarz" ? "block" : "none";
+                }
+
+                function editUser(button) {
+                    const row = button.closest('tr');
+                    const fullName = row.dataset.fullName;
+                    const lastName = row.dataset.lastName;
+                    const role = row.dataset.roleName;
+                    const email = row.dataset.email;
+                    const pesel = row.dataset.pesel;
+                    const nrUser = row.dataset.nrUser;
+
+                    document.getElementById("editName").value = fullName;
+                    document.getElementById("editSecondName").value = fullName;
+                    document.getElementById("editSurname").value = lastName;
+                    document.getElementById("editRole").value = role;
+                    document.getElementById("editEmail").value = email;
+                    document.getElementById("editPesel").value = pesel;
+                    document.getElementById("editNumerTel").value = pesel;
+                    //document.getElementById("lastPasswordChange").textContent = "2025-04-01";
+
+                    toggleGrafikVisibility();
+                    document.getElementById("userEditPanel").style.display = "flex";
+                }
+
+
+                // Usuwa użytkownika (tymczasowe alerty, można potem podpiąć do backendu)
+                function deleteUserFromFooter() {
+                    if (confirm("Na pewno chcesz usunąć tego użytkownika?")) {
+                        alert("Użytkownik usunięty (symulacja)");
+                        document.getElementById("userEditPanel").style.display = "none";
+                    }
+                }
+
+                // Dodaje nieobecność do listy (docelowo: zapisać przez fetch/ajax do bazy danych)
+                function addAbsence() {
+                    const doctor = document.getElementById("absenceDoctor").value;
+                    const from = document.getElementById("absenceFrom").value;
+                    const to = document.getElementById("absenceTo").value;
+
+                    if (!from || !to) {
+                        alert("Proszę uzupełnić daty.");
+                        return;
+                    }
+
+                    const list = document.getElementById("absenceList");
+                    const item = document.createElement("li");
+                    item.textContent = `${doctor}: ${from} – ${to}`;
+
+                    // ➕ Możesz dodać przycisk usuń obok wpisu:
+                    const delBtn = document.createElement("button");
+                    delBtn.textContent = "Usuń";
+                    delBtn.style.marginLeft = "10px";
+                    delBtn.onclick = () => list.removeChild(item);
+                    item.appendChild(delBtn);
+
+                    list.appendChild(item);
+                }
+
+                function filterUsers() {
+                    const name = document.getElementById('filterName').value.toLowerCase();
+                    const surname = document.getElementById('filterSurname').value.toLowerCase();
+                    const pesel = document.getElementById('filterPESEL').value.toLowerCase();
+                    const role = document.getElementById('filterRole').value.toLowerCase();
+
+                    const rows = document.querySelectorAll('#userTableBody tr');
+
+                    rows.forEach(row => {
+                        const [fullName, accountType, email, userPesel] = Array.from(row.children).map(td => td.textContent.toLowerCase());
+
+                        const [firstName, lastName] = fullName.split(' ');
+
+                        const matches =
+                            (!name || firstName.includes(name)) &&
+                            (!surname || lastName.includes(surname)) &&
+                            (!pesel || userPesel.includes(pesel)) &&
+                            (!role || accountType.includes(role));
+
+                        row.style.display = matches ? '' : 'none';
+                    });
+                }
+
+                function toggleScheduleEditor(button) {
+                    const editor = button.nextElementSibling;
+                    editor.style.display = editor.style.display === 'none' ? 'block' : 'none';
+                }
+
+                function toggleTimeInputs(checkbox) {
+                    const row = checkbox.closest('tr');
+                    const isDisabled = checkbox.checked;
+
+                    const startTime = row.querySelector('.start-time');
+                    const endTime = row.querySelector('.end-time');
+
+                    startTime.disabled = isDisabled;
+                    endTime.disabled = isDisabled;
+
+                    if (isDisabled) {
+                        startTime.value = '';
+                        endTime.value = '';
+                    }
+                }
+
+                function saveSchedule(button) {
+                    const editor = button.closest('.schedule-editor');
+                    const tableBody = editor.querySelector('tbody');
+                    const rows = tableBody.querySelectorAll('tr');
+
+                    const scheduleList = editor.parentElement.querySelector('.schedule-list');
+                    scheduleList.innerHTML = ''; // Wyczyść starą listę
+
+                    rows.forEach(row => {
+                        const day = row.dataset.day;
+                        const closed = row.querySelector('.closed-checkbox').checked;
+                        const start = row.querySelector('.start-time').value;
+                        const end = row.querySelector('.end-time').value;
+
+                        const li = document.createElement('li');
+
+                        if (closed) {
+                            li.textContent = `${day}: Nieczynne`;
+                        } else if (start && end) {
+                            li.textContent = `${day}: ${start} – ${end}`;
+                        } else {
+                            li.textContent = `${day}: Nieokreślone`;
+                        }
+
+                        scheduleList.appendChild(li);
+                    });
+
+                    // Zamknij edytor
+                    editor.style.display = 'none';
+                }
+            </script>
+
+        </div>
+    </div>
+
+<script>
+    function $(sel, ctx=document) { return ctx.querySelector(sel); }
+    function $$(sel, ctx=document) { return Array.from(ctx.querySelectorAll(sel)); }
+
+    document.addEventListener('DOMContentLoaded', loadUsers);
+    async function loadUsers() {
+        const resp = await fetch('/api/uzytkownicyDoPanelu');
+        const { success, users } = await resp.json();
+        if (!success) return alert('Błąd pobierania użytkowników');
+        const tbody = $('#userTableBody');
+        tbody.innerHTML = '';
+        users.forEach(u => {
+        const full = [u.firstName, u.middleName].filter(x=>x).join(' ');
+        const tr = document.createElement('tr');
+        tr.dataset.id=u.id; tr.dataset.role=u.roleName;
+        tr.dataset.full=full; tr.dataset.last=u.lastName;
+        tr.dataset.email=u.email; tr.dataset.pesel=u.pesel;
+        tr.innerHTML = `
+            <td>${full} ${u.lastName}</td>
+            <td>${u.roleName}</td>
+            <td>${u.email}</td>
+            <td>${u.pesel}</td>
+            <td><button onclick="editUser(this)">Szczegóły</button></td>`;
+        tbody.appendChild(tr);
+        });
+    }
+
+    async function editUser(btn) {
+        const tr = btn.closest('tr');
+        const id = tr.dataset.id, role=tr.dataset.role;
+        console.log('Rola użytkownika:', role);
+        $('#editName').value=tr.dataset.full;
+        $('#editSurname').value=tr.dataset.last;
+        $('#editRole').value=role;
+        $('#editEmail').value=tr.dataset.email;
+        $('#editPesel').value=tr.dataset.pesel;
+
+        toggleGrafikVisibility();
+        $('#userEditPanel').style.display = 'flex';
+        $('#grafikSection').dataset.currentId = id;
+
+        const roleLower = role.toLowerCase();
+            if (roleLower.includes('lekarz') || roleLower.includes('dentysta')) {
+            try {
+                const res = await fetch(`/api/lekarzPoUzytkowniku/${id}`);
+                const data = await res.json();
+                if (!data.success) {
+                    console.warn('Nie znaleziono lekarza dla użytkownika');
+                    return;
+                }
+                const idLekarza = data.idLekarze;
+                await showGrafik(idLekarza);
+                $('#grafikSection').style.display = 'block';
+                } catch (e) {
+                console.error('Błąd pobierania lekarza:', e);
+            }
+
+            $('#grafikSection').style.display = 'block';
+        }
+
+    }
+
+    function toggleGrafikVisibility() {
+        $('#grafikSection').style.display =
+        $('#editRole').value==='Lekarz' ? 'block' : 'none';
+    }
+
+    async function showGrafik(idLekarza) {
+
+        console.log('Pobieram grafik dla lekarza ID:', idLekarza);
+
+        const resp = await fetch(`/api/grafiki/${idLekarza}`);
+        const { success, grafik } = await resp.json();
+
+        console.log('Odpowiedź z API /api/grafiki:', grafik);
+
+        if (!success) return console.warn('Brak grafiku');
+        const ul = $('#grafikSection .schedule-list');
+
+        ul.innerHTML = grafik.map(d=>
+        `<li data-day-id="${d.IdDnia}">${d.Nazwa}: ${
+            d.godzinyPracyOd===null ? 'Nieczynne'
+            : `${d.godzinyPracyOd.slice(0,5)} – ${d.godzinyPracyDo.slice(0,5)}`
+        }</li>`).join('');
+
+        const tb = $('#grafikSection .schedule-editor tbody');
+        tb.innerHTML = '';
+        grafik.forEach(d => {
+        const tr = document.createElement('tr');
+        tr.dataset.idDnia = d.IdDnia;
+        tr.innerHTML = `
+            <td>${d.Nazwa}</td>
+            <td><input type="checkbox" class="closed-cb"></td>
+            <td><input type="time" class="start-time"></td>
+            <td><input type="time" class="end-time"></td>
+            <td><button class="save-day">Zapisz</button></td>`;
+
+        const cb = tr.querySelector('.closed-cb');
+        const iOd = tr.querySelector('.start-time');
+        const iDo = tr.querySelector('.end-time');
+
+        if (d.godzinyPracyOd===null) {
+            cb.checked=true; iOd.disabled=iDo.disabled=true;
+        } else {
+            iOd.value = d.godzinyPracyOd;
+            iDo.value = d.godzinyPracyDo;
+        }
+        cb.addEventListener('change', ()=> {
+            if (cb.checked) { iOd.value=iDo.value=''; iOd.disabled=iDo.disabled=true; }
+            else { iOd.disabled=iDo.disabled=false; }
+        });
+
+        tr.querySelector('.save-day').addEventListener('click', async ()=>{
+            const odVal = cb.checked ? '-' : iOd.value;
+            const doVal = cb.checked ? '-' : iDo.value;
+            console.log('zapis', odVal, doVal);
+            if (!cb.checked && (!odVal||!doVal)) {
+            return alert('Uzupełnij oba pola godziny');
+            }
+            try {
+            const r2 = await fetch(
+                `/api/grafiki/${idLekarza}/${d.IdDnia}`,
+                {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ od: odVal, to: doVal })
+                }
+                );
+
+            const { success, message } = await r2.json();
+            if (!success) throw new Error(message);
+            alert(`Zapisano dla ${d.Nazwa}`);
+            const li = ul.querySelector(`li[data-day-id="${d.IdDnia}"]`);
+            
+            li.textContent = `${d.Nazwa}: ${
+                odVal==='-' ? 'Nieczynne'
+                : `${odVal} – ${doVal}`
+            }`;
+            } catch(e) {
+            console.error(e);
+            alert('Błąd zapisu: '+e.message);
+            }
+        });
+
+        tb.appendChild(tr);
+        });
+    }
+</script>
+
+</body>
+</html>

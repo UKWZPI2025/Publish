@@ -1,0 +1,55 @@
+/* === DODATKOWE STYLE DLA ADMINISTRATORA === */
+.table_container {
+  overflow-x: auto;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+#tabelaWizyt {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+#tabelaWizyt th,
+#tabelaWizyt td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #e0e0e0;
+}
+
+#tabelaWizyt th {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+#tabelaWizyt td {
+  background-color: #fff;
+}
+
+#tabelaWizyt tr:hover td {
+  background-color: #f9f9f9;
+}
+
+button.aktywuj, button.edytuj, button.usun {
+  margin-right: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  color: white;
+}
+
+button.aktywuj {
+  background-color: #4CAF50;
+}
+button.edytuj {
+  background-color: #2196F3;
+}
+button.usun {
+  background-color: #f44336;
+}
