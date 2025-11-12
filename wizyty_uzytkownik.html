@@ -36,7 +36,6 @@
         <div class="mainbar">
           <div class="article">
             <h2 class="fancy-title">Twoje zaplanowane wizyty</h2>
-            <div id="komunikat"></div>
             <div id="listaWizyt" class="listaWizyt"></div>
             <hr />
             <h2 class="fancy-title">Umów nową wizytę</h2>
@@ -54,6 +53,7 @@
                 <input type="date" id="data" name="data"><br><br>
 
                 <label for="godzina">Godzina wizyty:</label>
+                <div id="komunikat"></div>
                 <div id="godzina-tiles" class="godzina-tiles"></div>
                 <input type="hidden" id="godzina" name="godzina">
                 <br><br>
@@ -141,6 +141,16 @@
   if (imie && nazwisko) {
     document.getElementById("powitanie").textContent = `Witaj ${imie} ${nazwisko}!`;
   }
+
+  //brak możliwości wyboru daty która już minęła
+  const dataInput = document.getElementById('data');
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const minDate = `${year}-${month}-${day}`;
+  dataInput.min = minDate;
+
 
   document.getElementById('formWizyta').addEventListener('submit', async e => {
     e.preventDefault();
