@@ -1,2 +1,1 @@
-Przykładowy plik został zmieniony.
-Bardzo jednak lubię placki.
+Publiczne repozytorium projektu grupy 9 UKW ZPI2025
