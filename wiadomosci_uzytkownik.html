@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Ortodonta123</title>
+<title>ŁUK</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link href="style/style.css" rel="stylesheet" type="text/css" />
 
@@ -14,7 +14,7 @@
   <div class="header">
     <div class="header_resize">
       <div class="logo">
-        <h1><a href="#"><span>O</span>rtodonta123</a> <small>klinika ortodontyczna</small></h1>
+        <h1><a href="#"><span>ŁUK</span></a> <small>klinika ortodontyczna</small></h1>
       </div>
       <div class="clr"></div>
       <div class="menu_nav">
@@ -45,17 +45,20 @@
 			  
 			  
 			  <!-- Toggle odbierania push -->
-            <p>
-              <label>
-                <input type="checkbox" id="pushToggle" />
-                Odbieraj powiadomienia o wizytach (push)
-              </label>
-            </p>
-            <p id="pushStatus" style="color: green; display: none;">
-              Subskrypcja aktywna – zaraz dostaniesz testowe powiadomienie.
-            </p>
+        <p>
+          <label>
+            <input type="checkbox" id="chkPushEnable" />
+            Odbieraj powiadomienia o wizytach (push)
+          </label>
+        </p>
 
-            <hr />
+        <p>Status: <span id="pushStatus">—</span></p>
+
+        <!-- ukryty przycisk sterowany przez checkboxa (używany przez powiadomienia.js) -->
+        <button id="btnPushToggle" type="button" style="display:none;"></button>
+
+        <hr />
+
 			
 			<!-- Link potwierdzający wizytę -->
             <p>
@@ -165,77 +168,6 @@
 
 
 
-
-
-<!-- skrypt do powiadomieniach push -->
-
-
-<script>
-    // 1) Rejestracja Service Workera
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('js/sw.js').catch(console.error);
-    }
-
-    // 2) Obsługa toggle push
-    const pushToggle = document.getElementById('pushToggle');
-    const pushStatus = document.getElementById('pushStatus');
-
-    pushToggle.addEventListener('change', async () => {
-      if (!('Notification' in window) || !('serviceWorker' in navigator)) {
-        alert('Twoja przeglądarka nie obsługuje powiadomień push.');
-        pushToggle.checked = false;
-        return;
-      }
-      if (pushToggle.checked) {
-        const perm = await Notification.requestPermission();
-        if (perm !== 'granted') {
-          alert('Odrzucono pozwolenie na powiadomienia.');
-          pushToggle.checked = false;
-          return;
-        }
-        // Wyślij testowe powiadomienie
-        const reg = await navigator.serviceWorker.ready;
-        reg.showNotification('Ortodonta123', {
-          body: 'Dziękujemy za subskrypcję powiadomień o wizytach!',
-          tag: 'test-push'
-        });
-        pushStatus.style.display = 'block';
-      } else {
-        // W „realnej” implementacji tu by było wypisanie z subskrypcji na serwerze
-        pushStatus.style.display = 'none';
-        alert('Anulowano subskrypcję powiadomień.');
-      }
-    });
-
-    // 3) Generowanie i obsługa linku potwierdzającego wizytę
-    const genBtn = document.getElementById('generateLinkBtn');
-    const linkContainer = document.getElementById('linkContainer');
-    const confirmStatus = document.getElementById('confirmStatus');
-
-    genBtn.addEventListener('click', () => {
-      // Symulujemy unikalny token
-      const token = Math.random().toString(36).substring(2, 10);
-      const link = document.createElement('a');
-      link.href = '#';
-      link.textContent = 'Potwierdź wizytę';
-      link.dataset.token = token;
-      linkContainer.innerHTML = '';
-      linkContainer.appendChild(link);
-
-      // Obsługa kliknięcia
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        // W rzeczywistości tutaj wyleciałoby żądanie do API, np. fetch('/api/confirm?token=' + token)
-        confirmStatus.style.display = 'block';
-        linkContainer.style.display = 'none';
-      });
-    });
-    </script>
-
-
-
-
-
 <!-- skrypt do czasu przypomnienia -->
 
 <script>
@@ -244,23 +176,54 @@
     menu.style.display = menu.style.display === "none" ? "block" : "none";
   }
 
-  // Zamknij menu po kliknięciu poza nim
   document.addEventListener("click", function(event) {
     const dropdown = document.getElementById("reminderDropdown");
     if (!dropdown.contains(event.target)) {
-      document.getElementById("dropdownMenu").style.display = "none";
+      const menu = document.getElementById("dropdownMenu");
+      if (menu) menu.style.display = "none";
     }
   });
+</script>
 
-   const imie = localStorage.getItem("imie");
+
+
+<script src="/js/powiadomienia.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const chk    = document.getElementById('chkPushEnable');
+    const btn    = document.getElementById('btnPushToggle');
+    const status = document.getElementById('pushStatus');
+    if (!chk || !btn || !status) return;
+
+    // po starcie powiadomienia.js ustawia data-state = 'on' / 'off'
+    setTimeout(() => {
+      const on = (btn.dataset.state === 'on');
+      chk.checked = on;
+      status.textContent = on
+        ? 'Powiadomienia push są włączone dla tego urządzenia.'
+        : 'Powiadomienia push są wyłączone.';
+    }, 400);
+
+    chk.addEventListener('change', async () => {
+      btn.click(); // powiadomienia.js robi subscribe/unsubscribe
+
+      setTimeout(() => {
+        const on = (btn.dataset.state === 'on');
+        chk.checked = on;
+        status.textContent = on
+          ? 'Powiadomienia push są włączone dla tego urządzenia.'
+          : 'Powiadomienia push są wyłączone.';
+      }, 500);
+    });
+  });
+
+  const imie = localStorage.getItem("imie");
   const nazwisko = localStorage.getItem("nazwisko");
-
   if (imie && nazwisko) {
     document.getElementById("powitanie").textContent = `Witaj ${imie} ${nazwisko}!`;
   }
 </script>
 
-
-
 </body>
 </html>
+

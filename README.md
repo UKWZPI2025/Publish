@@ -1,1 +1,1 @@
-Publiczne repozytorium projektu grupy 9 UKW ZPI2025
+Prywatne repozytorium projektu grupy 9 UKW ZPI2025

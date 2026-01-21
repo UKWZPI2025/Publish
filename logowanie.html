@@ -39,14 +39,26 @@
       .then(res => res.json())
       .then(info => {
         console.log("Odpowiedź serwera:", info);
-        if (info.success) {
-          localStorage.setItem("userId", info.idUzytkownika);
-          localStorage.setItem("imie",     info.imie);
-          localStorage.setItem("nazwisko", info.nazwisko);
-          localStorage.setItem("email",    info.email);
-          localStorage.setItem("telefon",  info.telefon);
-          window.location.href = "wizyty_uzytkownik.html";
+      if (info.success) {
+        localStorage.setItem("userId", info.idUzytkownika);
+        localStorage.setItem("imie",     info.imie);
+        localStorage.setItem("nazwisko", info.nazwisko);
+        localStorage.setItem("email",    info.email);
+        localStorage.setItem("telefon",  info.telefon);
+        localStorage.setItem("rola", info.rola);
+        localStorage.setItem("token", info.token);
+
+        if (info.rola === "recepcjonistka") {
+          window.location.href = "index_recepcjonista.html";
+        } else if (info.rola === "dentysta") {
+          window.location.href = "index_dentysta.html";
+        } else if (info.rola === "admin") {
+          window.location.href = "index_admin.html";
         } else {
+          window.location.href = "wizyty_uzytkownik.html"; // pacjent
+        }
+      }
+     else {
           alert("Błąd: " + info.message);
         }
       })

@@ -22,7 +22,7 @@
   box-sizing: border-box;
 }
 
-#formWizyta input,{
+#formWizyta input {
   margin-top: 6px;
   margin-bottom: 12px;
   padding: 8px;
@@ -126,6 +126,21 @@
   border: 1px solid #ebccd1;
 }
 
+#komunikat:empty { display: none; }
+
+#komunikat.komunikat{
+  display: block;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .2s ease, transform .2s ease;
+  cursor: pointer; 
+}
+
+#komunikat.komunikat.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
 
 .godzina-tiles {
     display: flex;
@@ -172,3 +187,66 @@
             transform: translateY(-50%);
             pointer-events: none;
         }
+/* ZAJĘTY slot + dowolny disabled — wygląd wyszarzony, przekreślony */
+.godzina-tile:disabled,
+.godzina-tile[disabled],
+.godzina-tile.zajeta {
+  background: #eee !important;
+  color: #9a9a9a !important;
+  border-color: #ccc !important;
+  cursor: not-allowed !important;
+  position: relative;
+  opacity: .8;
+}
+
+/* kreska przez środek (tak jak w .unavailable) */
+.godzina-tile.zajeta::after,
+.godzina-tile:disabled::after,
+.godzina-tile[disabled]::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 50%;
+  border-top: 2px solid #CBC9C9;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* wyłącz efekty hover/active dla zajętych/disabled (masz globalne :hover — to je przebija) */
+.godzina-tile.zajeta:hover,
+.godzina-tile:disabled:hover,
+.godzina-tile[disabled]:hover,
+.godzina-tile.zajeta:focus,
+.godzina-tile:disabled:focus,
+.godzina-tile[disabled]:focus {
+  background: #eee !important;
+  color: #9a9a9a !important;
+  border-color: #ccc !important;
+  outline: none;
+}
+
+.freed-banner{
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  padding: 14px;
+  margin: 12px 0;
+  background: #fff;
+}
+
+.freed-banner__title{
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.freed-banner__text{
+  margin-bottom: 10px;
+}
+
+.freed-banner__actions button{
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #cfcfcf;
+  cursor: pointer;
+}
+
